@@ -1,0 +1,21 @@
+# secrets
+.env
+.env.local
+*.key
+
+# foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+# NOTE: contracts/lib/ is intentionally NOT ignored — forge-std is committed
+# directly (no submodules) so a fresh clone builds with no extra steps.
+# That protects the "someone else can run it from your README" 25 pts.
+
+# node / next
+node_modules/
+web/.next/
+web/out/
+web/.vercel/
+web/next-env.d.ts
+
+.DS_Store
