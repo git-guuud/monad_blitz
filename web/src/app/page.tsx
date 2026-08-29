@@ -510,7 +510,6 @@ export default function PlayerPage() {
 
   return (
     <AppShell
-      active={onStage || view === "join" ? "play" : "home"}
       balance={`${Number(formatEther(balance)).toFixed(2)} MON`}
       walletHref={address ? explorerAddress(address) : undefined}
       mobileRight={<ThemeToggle tone="dark" />}

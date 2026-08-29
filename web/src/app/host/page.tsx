@@ -236,7 +236,7 @@ export default function HostPage() {
   const prizePool = pot - (pot * RAKE_BPS) / 10_000n;
 
   return (
-    <AppShell active="host">
+    <AppShell>
       <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-5 px-5 py-5 sm:px-8">
         {/* ------------------------------------------------------- controls */}
         <header className="flex flex-wrap items-center justify-between gap-4">

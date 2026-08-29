@@ -2,9 +2,14 @@ import {parseEther} from "viem";
 
 /// Contract parameters. Both windows are block-driven — never wall-clock — so the
 /// UI can never disagree with the contract about whether the buzzer has gone.
-/// Monad blocks are 400ms, so 25 + 25 blocks is a 10s answer window and a 10s
-/// reveal. The same round on Ethereum would be ~10 minutes of dead air.
-export const COMMIT_BLOCKS = 25;
+/// Monad blocks are 400ms, so 50 blocks is a 20s answer window and 25 a 10s
+/// reveal. The same round on Ethereum would be ~20 minutes of dead air.
+///
+/// Only the *answer* window is 20s. The reveal window stays at 10s: it is
+/// settlement, not thinking time, and 10s already proved to be ample slack for
+/// every reveal to land. Widening it would only add dead air to a phase nobody
+/// watches.
+export const COMMIT_BLOCKS = 50;
 /// Reveals all fire at once the instant the commit window shuts, but each one is
 /// a signature, a send and a confirmation, and a lagging node can force a retry.
 /// 25 blocks is 10 seconds of slack for a phase nobody has to watch.

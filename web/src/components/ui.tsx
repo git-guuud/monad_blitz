@@ -2,19 +2,7 @@
 
 import type {ReactNode} from "react";
 import {useCallback, useEffect, useState} from "react";
-import {
-  ArrowRightIcon,
-  BoltIcon,
-  HistoryIcon,
-  HomeIcon,
-  MoonIcon,
-  PlayIcon,
-  ProfileIcon,
-  SettingsIcon,
-  SunIcon,
-  TrophyIcon,
-  WalletIcon,
-} from "./icons";
+import {ArrowRightIcon, BoltIcon, MoonIcon, SunIcon, WalletIcon} from "./icons";
 import {THEME_KEY} from "@/lib/theme";
 
 export function short(address: string) {
@@ -63,17 +51,6 @@ export function ThemeToggle({tone = "light"}: {tone?: "light" | "dark"}) {
 
 /* -------------------------------------------------------------- app shell */
 
-export type NavKey = "home" | "play" | "history" | "profile" | "settings" | "host";
-
-const NAV: {key: NavKey; label: string; icon: typeof HomeIcon; href?: string}[] = [
-  {key: "home", label: "Home", icon: HomeIcon, href: "/"},
-  {key: "play", label: "Play", icon: PlayIcon, href: "/"},
-  {key: "history", label: "History", icon: HistoryIcon},
-  {key: "profile", label: "Profile", icon: ProfileIcon},
-  {key: "settings", label: "Settings", icon: SettingsIcon},
-  {key: "host", label: "Host", icon: TrophyIcon, href: "/host"},
-];
-
 export function Brand({size = "md"}: {size?: "sm" | "md"}) {
   return (
     <span className="flex items-center gap-2">
@@ -95,57 +72,17 @@ export function Brand({size = "md"}: {size?: "sm" | "md"}) {
 
 /// The rail is dark in both themes by design, so it is written against the
 /// fixed `rail-*` tokens rather than the semantic ones.
-function Rail({
-  active,
-  balance,
-  walletHref,
-}: {
-  active: NavKey;
-  balance?: ReactNode;
-  walletHref?: string;
-}) {
+///
+/// It carries no navigation. The design had Home / Play / History / Profile /
+/// Settings, but only two screens exist and the host reaches its one directly by
+/// URL — so the tabs were either duplicates of where you already are or links to
+/// nothing. A brand mark and the wallet you are actually spending from is the
+/// whole of what the rail has to say.
+function Rail({balance, walletHref}: {balance?: ReactNode; walletHref?: string}) {
   return (
     <aside className="hidden w-56 shrink-0 flex-col justify-between border-r border-rail-3 bg-rail px-3 py-5 lg:flex">
-      <div>
-        <div className="px-2 pb-6">
-          <Brand />
-        </div>
-        <nav className="flex flex-col gap-1">
-          {NAV.map(({key, label, icon: Icon, href}) => {
-            const isActive = key === active;
-            const className = [
-              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition",
-              isActive
-                ? "bg-rail-3 text-rail-text"
-                : href
-                  ? "text-rail-muted hover:bg-rail-2 hover:text-rail-text"
-                  : "cursor-not-allowed text-rail-muted/45",
-            ].join(" ");
-            const body = (
-              <>
-                <Icon width={18} height={18} />
-                {label}
-                {!href && (
-                  <span className="ml-auto rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-rail-muted/60">
-                    soon
-                  </span>
-                )}
-              </>
-            );
-            // History / Profile / Settings are in the design but have nothing
-            // on chain behind them yet — shown, and visibly inert, rather than
-            // linking somewhere that does not exist
-            return href ? (
-              <a key={key} href={href} className={className}>
-                {body}
-              </a>
-            ) : (
-              <span key={key} className={className} aria-disabled>
-                {body}
-              </span>
-            );
-          })}
-        </nav>
+      <div className="px-2">
+        <Brand />
       </div>
 
       {balance && (
@@ -186,13 +123,11 @@ function MobileBar({right}: {right?: ReactNode}) {
 }
 
 export function AppShell({
-  active,
   balance,
   walletHref,
   mobileRight,
   children,
 }: {
-  active: NavKey;
   balance?: ReactNode;
   walletHref?: string;
   mobileRight?: ReactNode;
@@ -201,7 +136,7 @@ export function AppShell({
   return (
     <div className="flex min-h-dvh flex-1 flex-col lg:flex-row">
       <MobileBar right={mobileRight} />
-      <Rail active={active} balance={balance} walletHref={walletHref} />
+      <Rail balance={balance} walletHref={walletHref} />
       <main className="flex min-w-0 flex-1 flex-col bg-bg">{children}</main>
     </div>
   );
