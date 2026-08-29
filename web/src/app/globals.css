@@ -1,26 +1,128 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------- tokens
+   Two kinds of colour live here.
+
+   Semantic tokens (--bg, --surface, --text …) flip with the theme, so every
+   component written against them works in light and dark without a `dark:`
+   variant. Fixed tokens (--brand, --action, --rail, --stage) do not: the rail
+   and the game stage are deliberately dark in both themes, exactly as in the
+   design — the stage is a stage.
+
+   `@theme inline` is what keeps the swap live: it maps Tailwind's colour names
+   onto the custom properties rather than baking their values in, so
+   `bg-surface` resolves at paint time and toggling the theme repaints without
+   a reload. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f7f9fb;
+  --surface-3: #eef2f6;
+  --border: #e5e8ee;
+  --border-strong: #d3d9e3;
+  --text: #0b0f19;
+  --muted: #6b7280;
+  --shadow: 0 1px 2px rgb(11 15 25 / 0.04), 0 8px 24px -12px rgb(11 15 25 / 0.12);
+}
+
+[data-theme="dark"] {
+  --bg: #0b0e14;
+  --surface: #12151d;
+  --surface-2: #171b25;
+  --surface-3: #1e2330;
+  --border: #262c39;
+  --border-strong: #333b4b;
+  --text: #f2f5fa;
+  --muted: #99a1b3;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+
+  /* fixed across themes */
+  --color-brand: #22c55e;
+  --color-brand-strong: #16a34a;
+  --color-brand-soft: #dcfce7;
+  --color-action: #2563eb;
+  --color-action-strong: #1d4ed8;
+  --color-danger: #ef4444;
+  --color-warn: #f59e0b;
+
+  --color-rail: #0f1218;
+  --color-rail-2: #1a1f29;
+  --color-rail-3: #232936;
+  --color-rail-text: #e8ebf2;
+  --color-rail-muted: #8b93a7;
+
+  --color-stage: #0d1117;
+  --color-stage-2: #161b22;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ---------------------------------------------------------------- motion
+   Phases here are sub-second, so motion has to be something the eye can
+   actually track at that speed: short, linear, and never blocking a tap. */
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+.slide-in { animation: slide-in 0.18s ease-out; }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+.rise-in { animation: rise-in 0.28s cubic-bezier(0.2, 0.8, 0.3, 1); }
+
+@keyframes pop-in {
+  0%   { opacity: 0; transform: scale(0.6); }
+  60%  { transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.pop-in { animation: pop-in 0.42s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgb(34 197 94 / 0.5); }
+  100% { box-shadow: 0 0 0 16px rgb(34 197 94 / 0); }
+}
+.pulse { animation: pulse-ring 1.1s ease-out infinite; }
+
+/* The result screen's confetti. Pure CSS — a canvas library would be a
+   dependency and a main-thread cost for two seconds of celebration. */
+@keyframes confetti-fall {
+  0%   { opacity: 0; transform: translate3d(0, -10vh, 0) rotate(0deg); }
+  10%  { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(var(--drift, 0px), 78vh, 0) rotate(720deg); }
+}
+.confetti-bit {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  animation: confetti-fall 2.4s linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-in, .rise-in, .pop-in, .pulse, .confetti-bit { animation: none; }
+  .confetti-bit { display: none; }
 }

@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type {Metadata} from "next";
+import {Geist, Geist_Mono} from "next/font/google";
+import {themeBootScript} from "@/lib/theme";
 import "./globals.css";
-import {Providers} from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,19 +14,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Monad Blitz",
-  description: "Built at Monad Blitz New Delhi V4",
+  title: "QuizBlitz — Blitz Trivia",
+  description:
+    "Live wagered trivia where answers are cryptographically sealed until the buzzer.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({children}: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      data-theme="light"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
-      </body>
+      <head>
+        <script dangerouslySetInnerHTML={{__html: themeBootScript}} />
+      </head>
+      <body className="flex min-h-full flex-col bg-bg text-text">{children}</body>
     </html>
   );
 }
