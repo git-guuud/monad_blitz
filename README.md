@@ -5,15 +5,19 @@
 
 | | |
 |---|---|
-| **Live app** | **https://monad-blitz-lovat.vercel.app/** |
+| **Live app** | **https://quizblitz.tech** |
 | **Contract** (Monad Testnet, chain `10143`) | [`0x3b7e9FAcE1FB5De3b4A08414182DEF8c9F8dE5Cd`](https://testnet.monadscan.com/address/0x3b7e9face1fb5de3b4a08414182def8c9f8de5cd) — **source verified** |
 | **Repo** | https://github.com/git-guuud/monad_blitz |
-| **Screens** | players join at [`/`](https://monad-blitz-lovat.vercel.app/) · host runs the game at `/host?token=<HOST_TOKEN>` |
+| **Screens** | players join at [`quizblitz.tech`](https://quizblitz.tech) · host runs the game at `quizblitz.tech/host?token=<HOST_TOKEN>` |
 
-Play it right now: open the live link on a phone, and open
-`https://monad-blitz-lovat.vercel.app/host?token=<HOST_TOKEN>` on a laptop to
-run the room. No wallet extension, no popups — your browser makes a burner and
-the host funds it.
+Also reachable at
+[`monad-blitz-lovat.vercel.app`](https://monad-blitz-lovat.vercel.app/) — the
+same deployment.
+
+Play it right now: open [quizblitz.tech](https://quizblitz.tech) on a phone,
+and open `quizblitz.tech/host?token=<HOST_TOKEN>` on a laptop to run the room.
+No wallet extension, no popups — your browser makes a burner and the host funds
+it.
 
 ---
 
